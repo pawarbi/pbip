@@ -1,0 +1,95 @@
+table KPIs
+	lineageTag: 23521682-1ea8-42a7-a3ac-03dfdcefa3de
+
+	measure Age = ```
+			
+			
+			VAR _max = CALCULATE(MAX(Store[OpenDate]), ALL(Store), ALL(Sales), ALL('Item'))
+			
+			return 
+			
+			DATEDIFF(CALCULATE(MAX(Store[OpenDate])),_max,YEAR)
+			```
+		formatString: 0
+		lineageTag: 731b9363-44e9-4267-adba-4526b10c8cff
+
+	measure 'Margin Var %' = [Gross Margin This Year %]-[Gross Margin Last Year %]
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 11889275-f892-497c-adeb-d22aef788bbb
+
+		changedProperty = FormatString
+
+	measure Regular-Markdown = DIVIDE([Regular_Sales_Dollars], [Markdown_Sales_Dollars])
+		lineageTag: f2068257-a877-475b-83dd-1c0111c7a736
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg $/Unit TY' = IF([Total Units This Year]<>0, [TotalSalesTY]/[Total Units This Year], BLANK())
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: a66fd125-8474-40e9-8246-2c25e40bd630
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Jan = CALCULATE([TotalSales], MONTH('Time'[Month])=1)
+		formatString: 0
+		displayFolder: cluster
+		lineageTag: 5820a761-d941-445e-a2a5-8c6380ee7178
+
+	measure Feb = CALCULATE([TotalSales], MONTH('Time'[Month])=2)
+		displayFolder: cluster
+		lineageTag: 083f2f95-471e-4dd5-80c0-bda744c6ab08
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Mar = CALCULATE([TotalSales], MONTH('Time'[Month])=3)
+		displayFolder: cluster
+		lineageTag: e14f8399-8240-4575-bfb6-e5168dd9cd56
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Apr = CALCULATE([TotalSales], MONTH('Time'[Month])=4)
+		displayFolder: cluster
+		lineageTag: 1431f505-6506-4b5b-8cc9-385aaae576f6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure May = CALCULATE([TotalSales], MONTH('Time'[Month])=4)
+		displayFolder: cluster
+		lineageTag: 1bcf003a-e1ec-49a9-a3f2-acbbd7bc66f3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Jun = CALCULATE([TotalSales], MONTH('Time'[Month])=6)
+		displayFolder: cluster
+		lineageTag: 158aaf5e-e973-46ce-a15a-a11c5d54cf45
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Jul = CALCULATE([TotalSales], MONTH('Time'[Month])=7)
+		displayFolder: cluster
+		lineageTag: f90840c1-2282-40c0-be1c-02a949d2c91a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column1
+		dataType: string
+		isHidden
+		lineageTag: 9c0c06c1-8963-4be1-8fcf-2a7def13ffb8
+		summarizeBy: none
+		sourceColumn: Column1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition KPIs-e05fcca3-1fd5-4c15-8534-992aa6d131be = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

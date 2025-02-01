@@ -1,0 +1,40 @@
+table 'Segment Summary'
+	lineageTag: 2fa79939-6adc-4651-bdac-a14245b44680
+
+	column Segment
+		lineageTag: 1afde253-bee1-48a3-8bcb-45ab15dcd1ce
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Item[Segment]
+
+		annotation SummarizationSetBy = Automatic
+
+	column TY
+		lineageTag: 83042a70-f007-458c-9c48-13d05adc60c9
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [TY]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LY
+		lineageTag: 534eb351-faa3-4aad-a9c8-a72c80ce3466
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [LY]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Segment Summary-f11dbb2b-eb99-434f-8758-d19cf791494b' = calculated
+		mode: import
+		source =
+				
+				
+				SUMMARIZECOLUMNS('Item'[Segment], "TY", [This Year Sales], "LY", [Last Year Sales])
+
+	annotation PBI_Id = be057031eb74401989b5a8283cda1fbe
+

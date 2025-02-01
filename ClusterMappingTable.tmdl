@@ -1,0 +1,60 @@
+table ClusterMappingTable
+	isHidden
+	isPrivate
+	lineageTag: c7e0ef90-aa5e-4923-94fc-20a0bc1bc35b
+
+	column Segment
+		lineageTag: 0225a753-b7b0-4f15-88f4-b9140fb851c3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Segment]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Item","TableItemName":"Segment (clusters)","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	column ClusterId
+		formatString: 0
+		lineageTag: ca6bc286-1db2-4d59-8ced-24b90dcda589
+		summarizeBy: count
+		isNameInferred
+		sourceColumn: [ClusterId]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Item","TableItemName":"Segment (clusters)","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	partition ClusterMappingTable-265b590a-e599-4d52-8879-b49ad92bb390 = calculated
+		mode: import
+		source = ```
+				VAR __DS0Core = 
+				  SUMMARIZECOLUMNS(
+				    'Item'[Segment],
+				    "Last_Year_Sales", 'Sales'[Last Year Sales],
+				    "This_Year_Sales", 'Sales'[This Year Sales]
+				  )
+				
+				VAR __DataTransformT0 = 
+				  KMeansClustering(
+				    SELECTCOLUMNS(
+				      __DS0Core,
+				      "Segment", 'Item'[Segment],
+				      "Last_Year_Sales", [Last_Year_Sales],
+				      "This_Year_Sales", [This_Year_Sales]
+				    ),
+				    {("[Last_Year_Sales]", "Attribute"),
+				      ("[This_Year_Sales]", "Attribute"),
+				      ("[Segment]", "Item")},
+				    {("[Segment]", BLANK()),
+				      ("ClusterId", "ClusterId")},
+				    -1
+				  )
+				
+				RETURN __DataTransformT0
+				```
+			retainDataTillForceCalculate
+
+	annotation ClusterMappingTable = true
+
+	annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Item","TableItemName":"Segment (clusters)","ObjectType":4},"LinkType":"UsedInGroup"}]
+

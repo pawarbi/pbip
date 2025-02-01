@@ -1,0 +1,28 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBIDesktopVersion = 2.139.2054.0 (24.12)+334ca1c95b576cc53924655643b0d36f21caac55
+
+annotation PBI_QueryOrder = ["Store","Sales","Item","Time","District","KPIs","ts"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Store
+ref table Sales
+ref table Item
+ref table Time
+ref table District
+ref table ClusterMappingTable
+ref table KPIs
+ref table 'Segment Summary'
+ref table ts
+
+ref cultureInfo en-US
+

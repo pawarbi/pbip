@@ -1,0 +1,37 @@
+table ts
+	lineageTag: b1ee7216-dbd7-4cc5-80f4-383c6f400359
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3436d59a-d36d-45b4-bdbe-60840cabff43
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Sales
+		dataType: int64
+		formatString: 0
+		lineageTag: 58b41c67-8f91-4ccd-b215-300c300b941c
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ts-8ea55bc0-e156-4c31-a899-1fcafeb723e8 = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\spawar\AppData\Local\Microsoft\Windows\INetCache\IE\M8BBDH5C\ts_frenchretail[1].csv"),[Delimiter=",", Columns=2, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Sales", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+
